@@ -2,6 +2,7 @@ import UIKit
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
+import AVFoundation
 
 @main
 class AppDelegate: RCTAppDelegate {
@@ -10,6 +11,12 @@ class AppDelegate: RCTAppDelegate {
     self.dependencyProvider = RCTAppDependencyProvider()
 
     // You can add your custom initial props in the dictionary below.
+    do {
+        try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+    } catch {
+        print("Failed to set audio session category:", error)
+    }
+    
     // They will be passed down to the ViewController used by React Native.
     self.initialProps = [:]
 

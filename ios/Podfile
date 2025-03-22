@@ -8,6 +8,9 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+
+$RNVideoUseVideoCaching=true
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
@@ -16,6 +19,10 @@ end
 
 target 'Reels' do
   config = use_native_modules!
+
+
+  pod 'SPTPersistentCache', :modular_headers => true;
+  pod 'DVAssetLoaderDelegate', :modular_headers => true;
 
   use_react_native!(
     :path => config[:reactNativePath],
