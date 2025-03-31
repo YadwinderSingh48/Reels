@@ -1,13 +1,70 @@
-import { Animated, StyleSheet, Text, View } from 'react-native'
+import { Alert, Animated, StyleSheet, Text, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { Colors } from '../../constants/Colors'
 import LOGO from '../../assets/images/logo_t.png';
 import CustomText from '../../components/global/CustomText';
 import { FONTS } from '../../constants/Fonts';
+import {jwtDecode} from 'jwt-decode';
+import { token_storage } from '../../redux/storage';
+import { resetAndNavigate } from '../../utils/NavigationUtils';
+import { refreshToken } from '../../redux/ApiConfig';
+import { useAppDispatch } from '../../redux/reduxHook';
+import { refetchUser } from '../../redux/actions/UserAction';
+
+interface JwtDecoded {
+  exp: number;
+}
 
 const SplashScreen:FC = () => {
     const [isStop,setIsStop] = useState<boolean>(false);
     const scale = new Animated.Value(1);
+    const dispatch = useAppDispatch();
+
+    const tokenCheck = async () => {
+      const access_token = token_storage.getString('access_token') as string;
+      const refresh_token = token_storage.getString('refresh_token') as string;
+
+      if(access_token) {
+        const decodedAccessToken = jwtDecode<JwtDecoded>(access_token);
+        const decodedRefreshToken = jwtDecode<JwtDecoded>(refresh_token);
+          const currentTime = Date.now() / 1000;
+
+          if(decodedRefreshToken?.exp < currentTime) {
+            resetAndNavigate('LoginScreen');
+            Alert.alert("Session Exxpired", "Your session has been expired, Please try again later.");
+            return; 
+          }
+
+          if(decodedRefreshToken?.exp < currentTime) {
+            try {
+              refreshToken();
+              //dispatch(refetchUser()) in the component
+              // This is how we actually call the function and trigger the Redux action.
+              dispatch(refetchUser());
+            } catch(error) {
+              console.log("Error ", error);
+              Alert.alert("Something Went Wrong", "An error occured, Please try again later");
+              return; 
+            }
+          }
+
+          resetAndNavigate('BottomTab');
+          return;
+      } 
+
+        resetAndNavigate('LoginScreen');
+        return;
+
+    };
+
+    useEffect(() => {
+        async function deepLinks() {
+            await tokenCheck();
+        };
+
+        deepLinks();
+    },[])
+
   useEffect(() => {
       const breathingEffect = Animated.loop(
         Animated.sequence([

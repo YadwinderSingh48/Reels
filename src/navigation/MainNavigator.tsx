@@ -2,10 +2,12 @@ import { StyleSheet } from 'react-native';
 import React, { FC } from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { mergedStack } from './ScreenCollection';
+import { UploadProvider } from '../components/uploadservice/uploadContext';
 
 const MainNavigator:FC = () => {
   const Stack = createNativeStackNavigator();
   return (
+    <UploadProvider>
     <Stack.Navigator initialRouteName='SplashScreen'
       screenOptions={{
           headerShown: false
@@ -17,6 +19,7 @@ const MainNavigator:FC = () => {
         ))
       }
     </Stack.Navigator>
+    </UploadProvider>
   )
 }
 
