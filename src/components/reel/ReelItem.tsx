@@ -2,6 +2,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native'
 import React, { FC } from 'react'
 import CustomText from '../global/CustomText';
 import UserDetails from './UserDetails';
+import InteractionButtons from './InteractionButtons';
 
 interface ReelItemProps {
     user: any;
@@ -13,6 +14,7 @@ interface ReelItemProps {
     onShare: () => void;
     onLongPress: () => void;
     isLiked: boolean;
+    onLongPressLike: () => void;
 }
 
 const ReelItem:FC<ReelItemProps> = ({
@@ -24,8 +26,8 @@ const ReelItem:FC<ReelItemProps> = ({
     onComment,
     onShare,
     onLongPress,
-    isLiked
-
+    isLiked,
+    onLongPressLike
 }) => {
 
 
@@ -37,6 +39,16 @@ const ReelItem:FC<ReelItemProps> = ({
                 {description}
             </CustomText>
       </View>
+
+      <InteractionButtons
+        likes={likes}
+        onLongPressLike={onLongPressLike}
+        comments={comments}
+        onLike={onLike}
+        onComment={onComment}
+        onShare={onShare}
+        isLiked={isLiked}
+      />
     </View>
   )
 }

@@ -3,10 +3,12 @@ import React, { FC } from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { mergedStack } from './ScreenCollection';
 import { UploadProvider } from '../components/uploadservice/uploadContext';
+import { SheetProvider } from 'react-native-actions-sheet';
 
 const MainNavigator:FC = () => {
   const Stack = createNativeStackNavigator();
   return (
+    <SheetProvider>
     <UploadProvider>
     <Stack.Navigator initialRouteName='SplashScreen'
       screenOptions={{
@@ -20,6 +22,7 @@ const MainNavigator:FC = () => {
       }
     </Stack.Navigator>
     </UploadProvider>
+    </SheetProvider>
   )
 }
 

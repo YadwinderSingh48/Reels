@@ -1,69 +1,99 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { FC } from 'react'
+import React, {useMemo} from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import CustomText from '../global/CustomText';
-import { FONTS } from '../../constants/Fonts';
-import { useApSelector } from '../../redux/reduxHook';
-import { selectUser } from '../../redux/reducers/userSlice';
-import { Colors } from '../../constants/Colors';
+import CustomText from '../../components/global/CustomText';
+import {FONTS} from '../../constants/Fonts';
+import {Colors} from '../../constants/Colors';
+import {push} from '../../utils/NavigationUtils';
+import {selectUser} from '../../redux/reducers/userSlice';
+import {selectFollowings} from '../../redux/reducers/followingSlice';
+import {useAppDispatch, useAppSelector} from '../../redux/reduxHook';
+import { toggleFollow } from '../../redux/actions/UserAction';
 
 interface UserDetailsProps {
-    user: any;
+  user: any;
 }
 
-const UserDetails: FC<UserDetailsProps> = ({ user }) => {
-    const loggedInUser = useApSelector(selectUser);
-    const isFollowing = true
+const UserDetails: React.FC<UserDetailsProps> = React.memo(({user}) => {
+  const loggedInUser = useAppSelector(selectUser);
+  const followingUsers = useAppSelector(selectFollowings);
+  const dispatch = useAppDispatch();
+
+  const isFollowing = useMemo(() => {
     return (
-        <View>
-            <TouchableOpacity style={styles.flexRow} >
-                <FastImage source={{ uri: user?.userImage, priority: FastImage.priority.high }} style={styles.img}
-                    resizeMode={FastImage.resizeMode.cover}
-                />
-                <CustomText variant='h8' fontFamily={FONTS.Medium} >
-                    {user?.username}
-                </CustomText>
+      followingUsers?.find((item: any) => item.id === user._id)?.isFollowing ??
+      user.isFollowing
+    );
+  }, [followingUsers, user._id, user.isFollowing]);
 
-                {loggedInUser?.id !== user._id && (
-                    <TouchableOpacity style={[styles.follow,
-                    {
-                        borderWidth: isFollowing ? 1 : 0,
-                        backgroundColor: isFollowing ? Colors.disabled : Colors.white
-                    }
-                    ]} >
-                        <CustomText variant='h9' fontFamily={FONTS.Medium} style={{color: isFollowing ? 'white' : 'black' }} >
-                            {isFollowing ? 'Unfollow' : 'Follow'}
-                        </CustomText>
-                    </TouchableOpacity>
-                )}
-            </TouchableOpacity>
-        </View>
-    )
-}
+  const handleFollow = async () => {
+    await dispatch(toggleFollow(user._id));
+  };
 
-export default UserDetails
+  return (
+    <View>
+      <TouchableOpacity
+        style={styles.flexRow}
+        onPress={() => {
+          push('UserProfileScreen', {
+            username: user.username,
+          });
+        }}>
+        <FastImage
+          source={{
+            uri: user?.userImage,
+            priority: FastImage.priority.high,
+          }}
+          style={styles.img}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <CustomText fontFamily={FONTS.Medium} variant="h8">
+          {user?.username}
+        </CustomText>
+        {loggedInUser?.id !== user._id && (
+          <TouchableOpacity
+            style={[
+              styles.follow,
+              {
+                backgroundColor: isFollowing ? 'transparent' : 'white',
+                borderWidth: isFollowing ? 1 : 0,
+                borderColor: isFollowing ? Colors.disabled : 'white',
+              },
+            ]}
+            onPress={handleFollow}>
+            <CustomText
+              variant="h9"
+              fontFamily={FONTS.Medium}
+              style={{color: isFollowing ? 'white' : 'black'}}>
+              {isFollowing ? 'Unfollow' : 'Follow'}
+            </CustomText>
+          </TouchableOpacity>
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
-    flexRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        marginBottom: 10,
+  img: {
+    height: 35,
+    width: 35,
+    borderRadius: 100,
+  },
+  follow: {
+    borderWidth: 1,
+    borderColor: Colors.text,
+    padding: 5,
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
+    borderRadius: 50,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 10,
+  },
+});
 
-    },
-    img: {
-        height: 35,
-        width: 35,
-        borderRadius: 100,
-
-    },
-    follow: {
-        borderWidth: 1,
-        borderColor: Colors.text,
-        padding: 5,
-        paddingHorizontal: 10,
-        backgroundColor: 'white',
-        borderRadius: 50
-    }
-
-})
+export default UserDetails;

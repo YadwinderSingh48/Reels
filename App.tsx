@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import { persistor, store } from './src/redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import './src/sheets/sheet'
 
 GoogleSignin.configure({
   webClientId: "838439444202-27khldo3hh1i09a4vilf7nn12k8nqc83.apps.googleusercontent.com",

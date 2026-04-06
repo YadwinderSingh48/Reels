@@ -38,7 +38,8 @@ export const dashboardStack = [
     {
         name: 'FeedReelScrollScreen',
         component: FeedReelScrollScreen,
-    }
+    },
+    
 ]
 
 export const mergedStack = [...dashboardStack,...authStack]

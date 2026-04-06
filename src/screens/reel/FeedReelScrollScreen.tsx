@@ -15,7 +15,7 @@ import VideoItem from '../../components/reel/VideoItem';
 
 
 interface FeedReelScrollScreenProps {
-  data: any[];
+  data: Reel[];
 }
 
 const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
@@ -82,7 +82,7 @@ const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
       }
   },[routeParams?.data]);
 
-  const renderVideoList = useCallback(({item,index}: {item:any, index:number}) => {
+  const renderVideoList = useCallback(({item,index}: {item:Reel, index:number}) => {
     return (
     //   <View style={{backgroundColor:'gray', flex:1, height: screenHeight}} > 
     // <Image source={{uri: item?.thumbUri}}
@@ -95,7 +95,7 @@ const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
     // />
     // </View>
     <VideoItem
-    key={index}
+    key={index.toString()}
       item={item}
       isVisible={index === currentVisibleIndex}
       preload= {Math.abs(currentVisibleIndex + 3) >= index}
