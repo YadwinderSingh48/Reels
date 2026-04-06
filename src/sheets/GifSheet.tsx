@@ -16,11 +16,13 @@ import ActionSheet, {
 } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import GIFLoader from '../assets/animations/giphy.gif';
-import {GIPHY_API_KEY} from '../redux/API';
+
 import {RFValue} from 'react-native-responsive-fontsize';
 import {ActivityIndicator} from 'react-native';
 import {FlatList} from 'react-native';
 import FastImage from 'react-native-fast-image';
+// import { GIPHY_API_KEY } from '../redux/API';
+const GIPHY_API_KEY = "2yAMbuRHM8eJgCbso5qiPW4YoJOoRr7s";
 
 const TRENDING_URL = `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=10`;
 const SEARCH_URL = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&limit=10&q=`;
@@ -35,6 +37,7 @@ const GifSheet = (props: SheetProps<'gif-sheet'>) => {
 
     try {
       const response = await fetch(url);
+      console.log("gif response ",response)
       const data = await response.json();
       setGifs(data.data);
     } catch (error) {
