@@ -21,8 +21,7 @@ import {RFValue} from 'react-native-responsive-fontsize';
 import {ActivityIndicator} from 'react-native';
 import {FlatList} from 'react-native';
 import FastImage from 'react-native-fast-image';
-// import { GIPHY_API_KEY } from '../redux/API';
-const GIPHY_API_KEY = "2yAMbuRHM8eJgCbso5qiPW4YoJOoRr7s";
+import { GIPHY_API_KEY } from '../redux/API';
 
 const TRENDING_URL = `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=10`;
 const SEARCH_URL = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&limit=10&q=`;
