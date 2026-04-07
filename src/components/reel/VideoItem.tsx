@@ -1,4 +1,4 @@
-import { Platform, Share, StyleSheet, Text, View } from 'react-native'
+import { Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { screenHeight, screenWidth } from '../../utils/Scaling';
 import { useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/reduxHook';
 import { selectLikedReel } from '../../redux/reducers/likeSlice';
 import { selectComments } from '../../redux/reducers/commentSlice';
 import { SheetManager } from 'react-native-actions-sheet';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 interface VideoItemProps {
@@ -25,6 +26,7 @@ interface VideoItemProps {
     isVisible: boolean;
     preload: boolean;
 }
+const STATUSBAR_HEIGHT = StatusBar.currentHeight || 0;
 
 const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
     const dispatch = useAppDispatch();
@@ -36,6 +38,8 @@ const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
     const likedReels = useAppSelector(selectLikedReel);
     const commentsCounts = useAppSelector(selectComments);
 
+    const {top,bottom}=useSafeAreaInsets();
+    console.log("topbottom",top,bottom, STATUSBAR_HEIGHT)
 
     const reelMeta = useMemo(() => {
         return {
@@ -62,7 +66,7 @@ const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
     };
 
     const handleShareReel = () => {
-        const reelUrl = `${Platform.OS == 'android' ? 'http://localhost:3000' : 'reelzzz:/'
+        const reelUrl = `${Platform.OS == 'android' ? 'https://reels-server-ot2h.onrender.com' : 'reels:/'
             }/share/reel/${item._id}`;
         const message = `Hey, Checkout this reel: ${reelUrl}`;
         Share.share({
@@ -129,7 +133,7 @@ const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
 
     const emptyFunction = () => { };
     return (
-        <View style={styles.container} >
+        <View style={[styles.container,{height:screenHeight}]} >
             <GestureHandlerRootView style={{ flex: 1 }} >
                 <GestureDetector gesture={Gesture.Exclusive(doubleTap, singleTap)} >
                     <View style={styles.videoContainer} >
@@ -156,7 +160,7 @@ const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
                                     }
                                     bufferConfig={{
                                         maxBufferMs: 3000,
-                                        minBufferMs: 25000,
+                                        minBufferMs: 2500,
                                         bufferForPlaybackMs: 2500,
                                         bufferForPlaybackAfterRebufferMs: 2500
                                     }}
@@ -173,7 +177,9 @@ const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
                                     minLoadRetryCount={5}
                                     resizeMode='cover'
                                     onReadyForDisplay={handleVideoLoad}
-
+                                    onError={(error)=>console.log(
+                                        "video error ",error
+                                    )}
                                 />
                             ) : null
                         }
@@ -231,7 +237,7 @@ export default memo(VideoItem, areEqual);
 
 const styles = StyleSheet.create({
     container: {
-        height: screenHeight,
+        height: screenHeight+STATUSBAR_HEIGHT,
         width: screenWidth,
         flexGrow: 1,
         flex: 1,

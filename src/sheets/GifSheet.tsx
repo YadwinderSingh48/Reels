@@ -19,9 +19,10 @@ import GIFLoader from '../assets/animations/giphy.gif';
 
 import {RFValue} from 'react-native-responsive-fontsize';
 import {ActivityIndicator} from 'react-native';
-import {FlatList} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
-import { GIPHY_API_KEY } from '../redux/API';
+// import { GIPHY_API_KEY } from '../redux/API';
+const GIPHY_API_KEY = "2yAMbuRHM8eJgCbso5qiPW4YoJOoRr7s";
 
 const TRENDING_URL = `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=10`;
 const SEARCH_URL = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&limit=10&q=`;
@@ -86,15 +87,16 @@ const GifSheet = (props: SheetProps<'gif-sheet'>) => {
   };
 
   return (
+    <View style={{ width: "100%" }}>
     <ActionSheet
       id={props.sheetId}
       headerAlwaysVisible={true}
       isModal={true}
       onClose={() => SheetManager.hide(props.sheetId)}
       gestureEnabled={Platform.OS == 'ios'}
-      keyboardHandlerEnabled={true}
+      keyboardHandlerEnabled={Platform.OS==='ios'?true: Platform.Version>='35' ? true: false}
       indicatorStyle={styles.indicator}
-      enableGesturesInScrollView={Platform.OS === 'ios'}
+      enableGesturesInScrollView={true}
       containerStyle={styles.container}
       springOffset={100}>
       <View style={styles.inputContainer}>
@@ -136,6 +138,7 @@ const GifSheet = (props: SheetProps<'gif-sheet'>) => {
         />
       )}
     </ActionSheet>
+    </View>
   );
 };
 

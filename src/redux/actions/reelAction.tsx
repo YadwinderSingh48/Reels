@@ -46,16 +46,18 @@ export const getReelById =
   (id: string, deepLinkType: string) => async (dispatch: any) => {
     try {
       const res = await AppAxios.get(`/reel/${id}`);
+      console.log("response of reel ",res)
       console.log(deepLinkType, id);
-      if (deepLinkType !== 'RESUME') {
-        resetAndNavigate('BottomTab');
-      }
-      navigate('ReelScrollScreen', {
-        data: [res.data],
-        index: 0,
-      });
+      // if (deepLinkType !== 'RESUME') {
+      //   resetAndNavigate('BottomTab');
+      // }
+      // navigate('ReelScrollScreen', {
+      //   data: [res?.data],
+      //   index: 0,
+      // });
+      return res?.data;
     } catch (error) {
       console.log('FETCH REEL ERROR', error);
-      return [];
+      return null;
     }
   };

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './src/redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import './src/sheets/sheet'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 GoogleSignin.configure({
   webClientId: "838439444202-27khldo3hh1i09a4vilf7nn12k8nqc83.apps.googleusercontent.com",
@@ -18,14 +19,16 @@ GoogleSignin.configure({
 
 const App = () => {
   return (
+    <SafeAreaProvider>
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      {/* <StatusBar translucent={true} backgroundColor={'transparent'} /> */}
       <Provider store={store} >
         <PersistGate loading={null} persistor={persistor} >
           <Navigation />
         </PersistGate>
       </Provider>
     </GestureHandlerRootView>
+    </SafeAreaProvider>
   )
 }
 

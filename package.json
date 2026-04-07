@@ -29,7 +29,7 @@
     "lottie-react-native": "^7.3.6",
     "react": "19.0.0",
     "react-native": "0.78.0",
-    "react-native-actions-sheet": "^0.9.3",
+    "react-native-actions-sheet": "^10.1.2",
     "react-native-collapsible-tab-view": "^7.0.1",
     "react-native-create-thumbnail": "^2.2.0",
     "react-native-fast-image": "^8.6.3",

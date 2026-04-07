@@ -32,7 +32,7 @@ const ReelListTab: React.FC<{
     return (
       <ProfileReelCard
         onPressReel={() => {
-          navigate('ReelScrollScreen', {
+          navigate('FeedReelScrollScreen', {
             data: data,
             index: index,
           });

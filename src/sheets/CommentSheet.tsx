@@ -184,6 +184,7 @@ const CommentSheet = (props: SheetProps<'comment-sheet'>) => {
   };
 
   return (
+    <View style={{ width: "100%" }}>
     <ActionSheet
       id={props.sheetId}
       headerAlwaysVisible={false}
@@ -198,7 +199,7 @@ const CommentSheet = (props: SheetProps<'comment-sheet'>) => {
       containerStyle={styles.container}
       gestureEnabled={Platform.OS === 'ios' ? true : false}
       enableGesturesInScrollView={Platform.OS === 'ios' ? true : false}
-      keyboardHandlerEnabled={true}
+      keyboardHandlerEnabled={Platform.OS==='ios'?true: Platform.Version>='35' ? true: false}
       indicatorStyle={styles.indicator}
       animated>
       <CustomText
@@ -327,6 +328,7 @@ const CommentSheet = (props: SheetProps<'comment-sheet'>) => {
         }}
       />
     </ActionSheet>
+    </View>
   );
 };
 

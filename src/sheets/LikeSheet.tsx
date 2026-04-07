@@ -41,14 +41,14 @@ const LikeSheet = (props: SheetProps<'like-sheet'>) => {
   }, [props.payload?.entityId, search]);
 
   return (
+    <View style={{ width: "100%" }}>
     <ActionSheet
       id={props.sheetId}
       headerAlwaysVisible={true}
       isModal={true}
       onClose={() => SheetManager.hide(props.sheetId)}
       gestureEnabled={Platform.OS == 'ios'}
-      keyboardHandlerEnabled={true}
-      indicatorStyle={styles.indicator}
+      keyboardHandlerEnabled={Platform.OS==='ios'?true: Platform.Version>='35' ? true: false}
       enableGesturesInScrollView={Platform.OS === 'ios'}
       containerStyle={styles.container}>
       <CustomText
@@ -92,6 +92,7 @@ const LikeSheet = (props: SheetProps<'like-sheet'>) => {
         />
       )}
     </ActionSheet>
+    </View>
   );
 };
 
