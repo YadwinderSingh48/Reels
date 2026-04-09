@@ -335,7 +335,7 @@ const CommentSheet = (props: SheetProps<'comment-sheet'>) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#121212',
-    height: screenHeight * 0.8,
+    height: screenHeight * 0.7,
   },
   indicator: {
     height: 4,

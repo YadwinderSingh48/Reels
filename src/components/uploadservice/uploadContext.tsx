@@ -21,6 +21,7 @@ import React, {
   import {uploadFile} from '../../redux/actions/fileAction';
   import {useAppDispatch} from '../../redux/reduxHook';
   import {createReel} from '../../redux/actions/reelAction';
+import { refetchUser } from '../../redux/actions/UserAction';
   
   interface UploadContextType {
     isUpload: boolean;
@@ -91,7 +92,10 @@ import React, {
           thumbUri: thumbnailResponse,
           caption: caption,
         };
-        await dispatch(createReel(data));
+        const res =await dispatch(createReel(data));
+        if(res) {
+          dispatch(refetchUser())
+        }
         setUploading(false);
         setUploadProgress(100);
         await setTimeout(() => {

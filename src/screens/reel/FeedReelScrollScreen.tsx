@@ -12,6 +12,7 @@ import { goBack } from '../../utils/NavigationUtils';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import VideoItem from '../../components/reel/VideoItem';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 interface FeedReelScrollScreenProps {
@@ -118,7 +119,7 @@ const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
     () => renderVideoList,
     [currentVisibleIndex, data]
   ); 
-
+const {top}=useSafeAreaInsets();
   return (
     <CustomView>
         <FlatList
@@ -126,19 +127,21 @@ const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
             keyExtractor={keyExtractor}
             renderItem={memoiedValue}
             //2 videos will load at a time
-            windowSize={2}
+            windowSize={4}
             // trigger function when reached at end 
             onEndReached={async () => {
               await fetchFeed(offset);
             } }
-            pagingEnabled
+            // pagingEnabled
+            snapToInterval={screenHeight}
+            snapToAlignment='start'
             viewabilityConfig={viewabilityConfig}
             // disabled the bounced
             disableIntervalMomentum={true}
             // the items which got scroll over will be moved to cache and will not be re rendered
             removeClippedSubviews
             // render 2 videos per batch i mean 2 by 2
-            maxToRenderPerBatch={2}
+            maxToRenderPerBatch={4}
             getItemLayout={getItemLayout}
             onViewableItemsChanged={onViewableItemsChnages}
             // render one video at initial
@@ -146,7 +149,7 @@ const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
             //when should onendreached triggered
             onEndReachedThreshold={0.1}
             // how much scrolling speed should be
-            decelerationRate={'normal'}
+            decelerationRate={'fast'}
             showsVerticalScrollIndicator = {false}
             scrollEventThrottle={16}
             ListFooterComponent={() => 
@@ -157,8 +160,8 @@ const FeedReelScrollScreen:FC<FeedReelScrollScreenProps> = () => {
             }
         />
         <Image source={Loader} style={styles.thumbnail} />
-        <View style={styles.backButton}>
-        <TouchableOpacity onPress={() => goBack()}>
+        <View style={[styles.backButton,{top:top+5}]}>
+        <TouchableOpacity hitSlop={20} onPress={() => goBack()}>
           <Icon name="arrow-back" color="white" size={RFValue(20)} />
         </TouchableOpacity>
       </View>
@@ -171,7 +174,7 @@ export default FeedReelScrollScreen
 const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 60 : 20,
+    // top: Platform.OS === 'ios' ? 60 : 20,
     left: 10,
     zIndex: 99,
   },

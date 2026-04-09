@@ -108,13 +108,27 @@ const VideoItem: FC<VideoItemProps> = ({ item, isVisible, preload }) => {
         handleDoubleTapLike();
     }).runOnJS(true);
 
+    // useEffect(() => {
+    //     setIsPaused(!isPaused);
+    //     if (!isVisible) {
+    //         setPaused(null);
+    //         setVideoLoaded(false);
+    //     }
+    // }, [isVisible]);
+
     useEffect(() => {
-        setIsPaused(!isPaused);
-        if (!isVisible) {
-            setPaused(null);
-            setVideoLoaded(false);
-        }
-    }, [isVisible]);
+    if (!isVisible) {
+        setPaused(null);
+        // setVideoLoaded(false);
+        setIsPaused(true);   // explicitly pause
+    } else {
+        setIsPaused(false);  // explicitly play
+    }
+    return () => {
+        // resets only when component is fully unmounted
+        setVideoLoaded(false);
+    };
+}, [isVisible]);
 
     useEffect(() => {
         if (!isFocused) {

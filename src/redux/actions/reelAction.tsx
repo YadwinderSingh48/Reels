@@ -5,9 +5,11 @@ import {refetchUser} from './userAction';
 export const createReel = (data: any) => async (dispatch: any) => {
   try {
     const res = await AppAxios.post('/reel', data);
-    dispatch(refetchUser());
+    // dispatch(refetchUser());
+    return true
   } catch (error) {
     console.log('REEL CREATE ERROR', error);
+    return false
   }
 };
 

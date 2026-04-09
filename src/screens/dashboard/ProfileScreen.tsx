@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {useAppSelector} from '../../redux/reduxHook';
 import { selectUser } from '../../redux/reducers/userSlice';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ProfileScreen = () => {
   const containerRef = useRef<CollapsibleRef>(null);
@@ -41,9 +42,9 @@ const ProfileScreen = () => {
       icon: 'logo-tableau',
     },
   ];
-
+const {top}=useSafeAreaInsets();
   return (
-    <CustomSafeAreaView style={styles.container}>
+    <CustomSafeAreaView style={{...styles.container,paddingTop:top+5}}>
       <Tabs.Container
         lazy
         cancelLazyFadeIn
@@ -110,7 +111,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     overflow: 'hidden',
-    paddingTop: 10,
     paddingVertical: 0,
     backgroundColor: Colors.background,
   },
